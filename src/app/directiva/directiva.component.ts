@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-directiva',
-  templateUrl: './directiva.component.html',
-  styleUrls: ['./directiva.component.css']
+    templateUrl: "./directiva.component.html",
+    selector: "app-directiva",
+    styleUrls: ["./directiva.component.css"]
 })
 export class DirectivaComponent implements OnInit {
+    listaCursos: string[] = ["Typescript", "Java", "PHP", "C#", "Javascript"];
 
-  constructor() { }
+    // tslint:disable-next-line: no-inferrable-types
+    habilitar: boolean = true;
 
-  ngOnInit() {
-  }
+    constructor() {}
 
+    ngOnInit() {}
+
+    setHabilitar(): void {
+        this.habilitar = !this.habilitar;
+
+        if (this.habilitar === true) {
+            console.log("Mostrar");
+        } else {
+            console.log("Ocultar");
+        }
+    }
 }
