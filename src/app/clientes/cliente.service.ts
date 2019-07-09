@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class ClienteService {
 
+  // tslint:disable-next-line:no-inferrable-types
   private urlEndpoint: string = 'http://localhost:8080/api/clientes';
   constructor(private http: HttpClient) { }
 
