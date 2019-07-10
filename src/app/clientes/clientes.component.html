@@ -3,6 +3,13 @@
         <div class="card-header">Clientes</div>
         <div class="card-body text-primary">
             <h5 class="card-title">Listado de clientes</h5>
+
+            <div class="my-4 text-left">
+                <button type="button" 
+                [routerLink]= "['/clientes/form']"
+                class="btn btn-primary btn-rounded">Crear Cliente</button>
+            </div>
+
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>

@@ -7,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  title: String = 'App Angular';
+// tslint:disable-next-line: no-inferrable-types
+  title: string = 'App Angular';
 
   constructor() { }
 
