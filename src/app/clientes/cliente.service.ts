@@ -24,26 +24,28 @@ export class ClienteService {
 
         // return this.http.get<Cliente[]>(this.urlEndpoint);
 
-        return this.http
-            .get(this.urlEndpoint)
-            .pipe(
-                // como trae un objeto hashMap tenemos  que convertirlo con el map en un 
-                // objeto del tipo cliente de la siguiente manera
-                map(response => response as Cliente[])
-            );
+        return this.http.get(this.urlEndpoint).pipe(
+            // como trae un objeto hashMap tenemos  que convertirlo con el map en un
+            // objeto del tipo cliente de la siguiente manera
+            map(response => response as Cliente[])
+        );
     }
 
     create(cliente: Cliente): Observable<Cliente> {
-        return this.http.post(this.urlEndpoint, cliente, {
-            headers: this.httpHeaders
-        }).pipe(
-            map((response: any) => response.cliente as Cliente ),
-            catchError(e => {
-                console.error(e.error.mensaje);
-                Swal.fire(e.error.mensaje, e.error.error,  "error");
-                return throwError(e);
+        return this.http
+            .post(this.urlEndpoint, cliente, {
+                headers: this.httpHeaders
             })
-        );
+            .pipe(
+                // como trae un objeto hashMap tenemos  que convertirlo con el map en un
+                // objeto del tipo cliente de la siguiente manera
+                map((response: any) => response.cliente as Cliente),
+                catchError(e => {
+                    console.error(e.error.mensaje);
+                    Swal.fire(e.error.mensaje, e.error.error, "error");
+                    return throwError(e);
+                })
+            );
     }
 
     getCliente(id): Observable<Cliente> {
@@ -58,34 +60,36 @@ export class ClienteService {
     }
 
     update(cliente: Cliente): Observable<Cliente> {
-        return this.http.put<Cliente>(
-            `${this.urlEndpoint}/${cliente.id}`,
-            cliente,
-            { headers: this.httpHeaders }
-        ).pipe(
-            // como trae un objeto hashMap tenemos  que convertirlo con el map en un 
-            // objeto del tipo cliente de la siguiente manera
-            map( (response: any) => response.cliente as Cliente),
-            catchError(e => {
-                console.error(e.error.mensaje);
-                Swal.fire(e.error.mensaje, e.error.error,  "error");
-                return throwError(e);
+        return this.http
+            .put<Cliente>(`${this.urlEndpoint}/${cliente.id}`, cliente, {
+                headers: this.httpHeaders
             })
-        );
+            .pipe(
+                // como trae un objeto hashMap tenemos  que convertirlo con el map en un
+                // objeto del tipo cliente de la siguiente manera
+                map((response: any) => response.cliente as Cliente),
+                catchError(e => {
+                    console.error(e.error.mensaje);
+                    Swal.fire(e.error.mensaje, e.error.error, "error");
+                    return throwError(e);
+                })
+            );
     }
 
     delete(id: number): Observable<Cliente> {
-        return this.http.delete<Cliente>(`${this.urlEndpoint}/${id}`, {
-            headers: this.httpHeaders
-        }).pipe(
-            // como trae un objeto hashMap tenemos  que convertirlo con el map en un 
-            // objeto del tipo cliente de la siguiente manera
-            map((response: any) => response.cliente as Cliente),
-            catchError(e => {
-                console.error(e.error.mensaje);
-                Swal.fire(e.error.mensaje, e.error.error,  "error");
-                return throwError(e);
+        return this.http
+            .delete<Cliente>(`${this.urlEndpoint}/${id}`, {
+                headers: this.httpHeaders
             })
-        );
+            .pipe(
+                // como trae un objeto hashMap tenemos  que convertirlo con el map en un
+                // objeto del tipo cliente de la siguiente manera
+                map((response: any) => response.cliente as Cliente),
+                catchError(e => {
+                    console.error(e.error.mensaje);
+                    Swal.fire(e.error.mensaje, e.error.error, "error");
+                    return throwError(e);
+                })
+            );
     }
 }
