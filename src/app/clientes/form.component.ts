@@ -15,6 +15,8 @@ export class FormComponent implements OnInit {
     private titulo: string = "Crear cliente";
     private cliente: Cliente = new Cliente();
 
+    private errores: string[];
+
     constructor(
         private clienteService: ClienteService,
         private routes: Router,
@@ -27,7 +29,8 @@ export class FormComponent implements OnInit {
 
     public cargarCliente(): void {
         this.activateRoute.params.subscribe(params => {
-            let id: any = params["id"];
+            // tslint:disable-next-line: prefer-const, no-string-literal
+            const id: any = params['id'];
             if (id) {
                 this.clienteService
                     .getCliente(id)
@@ -46,15 +49,34 @@ export class FormComponent implements OnInit {
                 type: "success"
             });
             this.routes.navigate(["/clientes"]);
+        },
+        err => {
+            this.errores = err.error.errors as string[];
+            console.log("codigo desde backend: " + err.status);
+            console.log(err.error);
+            console.log(err);
         });
     }
 
     public update(): void {
         console.log("Actualiza");
-        this.clienteService.update(this.cliente)
-          .subscribe(cliente => {
-            this.routes.navigate(["/clientes"])
-            swal.fire({ title: "Cliente Actualizado", text: `Cliente ${ cliente.nombre } ha sido actualizado correctamente`,type: "success" })
-          });
+        this.clienteService.update(this.cliente).subscribe(
+            cliente => {
+                this.routes.navigate(["/clientes"]);
+                swal.fire({
+                    title: "Cliente Actualizado",
+                    text: `Cliente ${
+                        cliente.nombre
+                    } ha sido actualizado correctamente`,
+                    type: "success"
+                });
+            },
+            err => {
+                this.errores = err.error.errors as string[];
+                console.log("codigo desde backend: " + err.status);
+                console.log(err.error);
+                console.log(err);
+            }
+        );
     }
 }

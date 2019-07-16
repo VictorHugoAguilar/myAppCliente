@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
+import {formatDate, DatePipe, registerLocaleData} from "@angular/common";
 import { CLIENTES } from "./clientes.json";
 import { Cliente } from "./cliente";
 import { Observable, of, throwError } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { map, catchError } from "rxjs/operators";
+import { map, catchError, tap } from "rxjs/operators";
 import Swal from "sweetalert2";
 import { Router } from "@angular/router";
+
 
 @Injectable()
 export class ClienteService {
@@ -19,15 +21,35 @@ export class ClienteService {
 
     constructor(private http: HttpClient, private router: Router) {}
 
-    getClientes(): Observable<Cliente[]> {
+    getClientes(page: number): Observable<any> {
         // return of(CLIENTES);
 
         // return this.http.get<Cliente[]>(this.urlEndpoint);
 
-        return this.http.get(this.urlEndpoint).pipe(
+        return this.http.get(this.urlEndpoint + '/page/' + page).pipe(
+            tap((response: any) => {
+                // tslint:disable-next-line: prefer-const
+                let clientes = response as Cliente[];
+                (response.content as Cliente[]).forEach(
+                    cliente => {
+                        console.log(cliente.nombre);
+                    });
+            }),
             // como trae un objeto hashMap tenemos  que convertirlo con el map en un
             // objeto del tipo cliente de la siguiente manera
-            map(response => response as Cliente[])
+            map( (response: any) => {
+                (response.content as Cliente[]).map(cliente => {
+                    cliente.nombre = cliente.nombre.toUpperCase();
+                    // utilizando formatDate
+                    // cliente.createAt = formatDate(cliente.createAt, 'dd-MM-yyyy', 'en-US');
+                    // utilizando DatePipe que mas por debajo si utiliza formaDate
+                    // tslint:disable-next-line: prefer-const
+                    let datePipe = new DatePipe('es');
+                    cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy');
+                    return cliente;
+               });
+                return response;
+            })
         );
     }
 
@@ -41,6 +63,9 @@ export class ClienteService {
                 // objeto del tipo cliente de la siguiente manera
                 map((response: any) => response.cliente as Cliente),
                 catchError(e => {
+                    if (e.status === 400) {
+                        return throwError(e);
+                    }
                     console.error(e.error.mensaje);
                     Swal.fire(e.error.mensaje, e.error.error, "error");
                     return throwError(e);
@@ -69,6 +94,9 @@ export class ClienteService {
                 // objeto del tipo cliente de la siguiente manera
                 map((response: any) => response.cliente as Cliente),
                 catchError(e => {
+                    if (e.status === 400) {
+                        return throwError(e);
+                    }
                     console.error(e.error.mensaje);
                     Swal.fire(e.error.mensaje, e.error.error, "error");
                     return throwError(e);
