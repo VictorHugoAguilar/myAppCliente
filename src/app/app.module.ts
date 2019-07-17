@@ -2,6 +2,16 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, LOCALE_ID } from "@angular/core";
 import {registerLocaleData} from '@angular/common';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+// importamos para los datepicker
+import { MatNativeDateModule,
+         MatDatepickerModule
+        } from '@angular/material';
+
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+
+
 // importamos modulo para la fecha en español
 import localeES from '@angular/common/locales/es';
 
@@ -49,7 +59,11 @@ const ROUTES: Routes = [
         BrowserModule,
         HttpClientModule,
         FormsModule,
-        RouterModule.forRoot(ROUTES)
+        RouterModule.forRoot(ROUTES),
+        BrowserAnimationsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatMomentDateModule
     ],
     providers: [
         ClienteService,
